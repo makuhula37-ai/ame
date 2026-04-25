@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Civics Syllabus Explorer | Interactive Study App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Noto Sans', sans-serif;
+            background: linear-gradient(145deg, #eef2f7 0%, #d9e2ec 100%);
+            color: #1a2c3e;
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+
+        /* main container */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.6);
+            border-radius: 2.5rem;
+            backdrop-filter: blur(2px);
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2);
+            overflow: hidden;
+            padding: 1.8rem 2rem 2rem 2rem;
+            transition: all 0.2s;
+        }
+
+        /* header section */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #2c5f8a;
+            padding-bottom: 1rem;
+        }
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e4663, #2c7da0);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .header p {
+            color: #2c3e4e;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        /* tab navigation */
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #cbd8e6;
+            padding-bottom: 0.75rem;
+        }
+        .tab-btn {
+            background: #eef3fc;
+            border: none;
+            padding: 0.7rem 1.4rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #1f5068;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .tab-btn i {
+            margin-right: 6px;
+        }
+        .tab-btn:hover {
+            background: #d4e2f0;
+            transform: translateY(-2px);
+        }
+        .tab-btn.active {
+            background: #1e5a7a;
+            color: white;
+            box-shadow: 0 6px 12px -8px #0a2e44;
+        }
+
+        /* content panel */
+        .panel {
+            display: none;
+            animation: fadeIn 0.25s ease;
+        }
+        .panel.active-panel {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        /* syllabus grid */
+        .syllabus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        .card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 12px 20px -12px rgba(0,0,0,0.15);
+            transition: all 0.2s;
+            border-left: 7px solid #2c7da0;
+        }
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #1f4763;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .badge {
+            background: #e0f0f9;
+            padding: 0.2rem 0.7rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1f605c;
+        }
+        .card p {
+            line-height: 1.4;
+            margin: 0.8rem 0;
+            color: #2d3e50;
+        }
+        .sub-topics {
+            background: #f8fafd;
+            border-radius: 1rem;
+            padding: 0.8rem 1rem;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+        }
+        .sub-topics strong {
+            color: #1c6e8f;
+        }
+
+        /* quiz panel */
+        .quiz-area {
+            background: white;
+            border-radius: 2rem;
+            padding: 1.8rem;
+            margin-top: 1rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            background: #eef2fa;
+            padding: 1rem;
+            border-radius: 1rem;
+        }
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.8rem;
+        }
+        .option {
+            background: #f4f9ff;
+            border: 1px solid #cce3f0;
+            border-radius: 1.2rem;
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option:hover {
+            background: #e2eff9;
+            transform: scale(0.99);
+        }
+        .option input {
+            transform: scale(1.1);
+            accent-color: #1e5a7a;
+            cursor: pointer;
+        }
+        .option label {
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+        }
+        .quiz-feedback {
+            background: #eef2f5;
+            border-radius: 1rem;
+            padding: 0.8rem;
+            margin: 1rem 0;
+            font-weight: 500;
+        }
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+        button {
+            background: #2c7da0;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        button.secondary {
+            background: #5f8aa7;
+        }
+        button.secondary:hover {
+            background: #3e6988;
+        }
+        button:hover {
+            background: #1d5e7c;
+            transform: translateY(-1px);
+        }
+        .score-area {
+            font-weight: bold;
+            background: #e6f0f5;
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            text-align: center;
+        }
+
+        /* about/glossary */
+        .glossary-list {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1rem 1.8rem;
+            list-style-type: none;
+        }
+        .glossary-list li {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #e2edf2;
+            font-size: 1rem;
+        }
+        .glossary-list li span {
+            font-weight: 700;
+            color: #1e5a7a;
+        }
+
+        footer {
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #4a6c7c;
+            border-top: 1px solid #cbdbe0;
+            padding-top: 1rem;
+        }
+
+        @media (max-width: 700px) {
+            .app-container {
+                padding: 1rem;
+            }
+            .tab-btn {
+                padding: 0.4rem 1rem;
+                font-size: 0.85rem;
+            }
+            .question-text {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header">
+        <h1>📚 Civics Syllabus Explorer</h1>
+        <p>🇺🇳 Core components of democratic governance, rights, participation & global citizenship</p>
+    </div>
+
+    <!-- Tabs navigation -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="syllabus">📖 Syllabus Units</button>
+        <button class="tab-btn" data-tab="quiz">🧠 Knowledge Check</button>
+        <button class="tab-btn" data-tab="glossary">📘 Key Terms & Glossary</button>
+    </div>
+
+    <!-- PANEL 1: SYLLABUS UNITS (Main civics syllabus) -->
+    <div id="syllabus" class="panel active-panel">
+        <h2 style="margin-bottom: 0.5rem;">📌 Main Civics Syllabus Areas</h2>
+        <p style="margin-bottom: 1rem;">Based on standard high-school civics framework: foundations of government, rights & responsibilities, political institutions, civic participation, rule of law, and global engagement.</p>
+        <div class="syllabus-grid" id="syllabusGrid"></div>
+    </div>
+
+    <!-- PANEL 2: QUIZ -->
+    <div id="quiz" class="panel">
+        <div class="quiz-area">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap;">
+                <h2>📝 Civics Mastery Quiz</h2>
+                <div class="score-area" id="quizScoreDisplay">Score: 0 / 0</div>
+            </div>
+            <div id="quizContainer">
+                <!-- dynamic quiz rendering -->
+            </div>
+            <div class="quiz-nav">
+                <button id="prevQuestion" class="secondary">◀ Previous</button>
+                <button id="nextQuestion">Next ▶</button>
+                <button id="submitQuiz" style="background:#2f6b47;">✔ Submit & Score</button>
+                <button id="resetQuiz" class="secondary">⟳ Reset Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL 3: GLOSSARY / CORE TERMS -->
+    <div id="glossary" class="panel">
+        <h2>📖 Civic Vocabulary & Core Concepts</h2>
+        <ul class="glossary-list" id="glossaryList"></ul>
+        <p style="margin-top: 1rem; font-style: italic;">Essential terms drawn from the major syllabus units.</p>
+    </div>
+
+    <footer>
+        🏛️ Interactive Civics Syllabus — Rights | Representation | Participation | Justice
+    </footer>
+</div>
+
+<script>
+    // ---------- SYLLABUS DATA (6 main units aligned with standard civics framework) ----------
+    const syllabusUnits = [
+        {
+            title: "🏛️ Foundations of Government",
+            description: "Core principles of democracy, constitution, separation of powers, federalism, and social contract theory.",
+            topics: ["Popular sovereignty", "Limited government", "Checks & balances", "Federal vs. state powers", "Magna Carta & Declaration of Independence"]
+        },
+        {
+            title: "⚖️ Rights & Responsibilities of Citizens",
+            description: "Civil liberties, human rights, Bill of Rights, duties of citizens, and civic responsibilities.",
+            topics: ["First Amendment freedoms", "Right to vote & jury duty", "Equal protection (14th)", "Civic participation importance", "Selective incorporation"]
+        },
+        {
+            title: "🏢 Institutions of Government",
+            description: "Structure and functions of legislative, executive, and judicial branches.",
+            topics: ["Congress: House & Senate", "Presidency & Cabinet", "Supreme Court & Judicial review", "Bureaucracy & agencies", "Checks on each branch"]
+        },
+        {
+            title: "🗳️ Political Participation & Elections",
+            description: "Voting behavior, campaigns, interest groups, media, and electoral processes.",
+            topics: ["Elections & voting rights", "Political parties & primaries", "Campaign finance & PACs", "Media influence", "Public opinion & polls"]
+        },
+        {
+            title: "⚙️ Rule of Law & Justice System",
+            description: "Due process, criminal justice, civil rights enforcement, and legal precedents.",
+            topics: ["Due process (5th & 14th)", "Criminal vs. civil law", "Jury trials & appeals", "Rights of the accused", "Landmark Supreme Court cases"]
+        },
+        {
+            title: "🌍 Global Citizenship & Civic Engagement",
+            description: "International relations, human rights treaties, NGO roles, and global cooperation.",
+            topics: ["United Nations & Declaration of Human Rights", "Global issues (climate, migration)", "Diplomacy & foreign policy", "Active community engagement", "Sustainable Development Goals"]
+        }
+    ];
+
+    // ----- QUIZ BANK (12 questions covering syllabus core) -----
+    const quizQuestions = [
+        { text: "Which document first established the principle of limited government by taxing only with consent in 1215?", options: ["Magna Carta", "English Bill of Rights", "US Constitution", "Declaration of Independence"], correct: 0 },
+        { text: "The concept of 'separation of powers' divides government into which three branches?", options: ["Executive, Legislative, Judicial", "Federal, State, Local", "Senate, House, Supreme Court", "Police, Courts, Military"], correct: 0 },
+        { text: "Which amendment guarantees freedom of speech, religion, and the press?", options: ["First Amendment", "Second Amendment", "Fourteenth Amendment", "Fourth Amendment"], correct: 0 },
+        { text: "What is the primary duty of the judicial branch?", options: ["Make laws", "Interpret laws and review constitutionality", "Enforce laws", "Declare war"], correct: 1 },
+        { text: "Which landmark Supreme Court case established judicial review (Marbury v. Madison)?", options: ["McCulloch v. Maryland", "Marbury v. Madison", "Brown v. Board", "Roe v. Wade"], correct: 1 },
+        { text: "What does the 'Due Process Clause' of the 5th and 14th Amendments guarantee?", options: ["Freedom from cruel punishment", "Fair treatment through the normal judicial system", "Right to bear arms", "Right to vote regardless of race"], correct: 1 },
+        { text: "The formal process by which a president is accused of misconduct is called?", options: ["Impeachment", "Recall", "Censure", "Veto override"], correct: 0 },
+        { text: "Which of the following is a civic responsibility expected of citizens (not mandatory but vital)?", options: ["Paying taxes (required)", "Voting in elections", "Serving on a jury (if summoned)", "Registering for selective service"], correct: 1 },
+        { text: "Which international document outlines fundamental human rights recognized globally?", options: ["Geneva Conventions", "UN Universal Declaration of Human Rights", "NATO Charter", "Kyoto Protocol"], correct: 1 },
+        { text: "The system of 'checks and balances' allows Congress to override a presidential veto by:", options: ["Simple majority", "Two-thirds majority in both chambers", "Unanimous vote", "Judicial order"], correct: 1 },
+        { text: "What is the primary purpose of a political party?", options: ["Influence policy by nominating candidates and winning elections", "Run the court system", "Regulate campaign finance", "Enforce laws"], correct: 0 },
+        { text: "The 14th Amendment is significant because it guarantees:", options: ["Right to vote for women", "Equal protection under the law", "Abolition of slavery", "Income tax"], correct: 1 }
+    ];
+
+    // ----- GLOSSARY TERMS (key civics concepts matching syllabus) -----
+    const glossaryTerms = [
+        { term: "Popular Sovereignty", definition: "Principle that government authority derives from the consent of the governed." },
+        { term: "Federalism", definition: "Division of power between national and state governments." },
+        { term: "Judicial Review", definition: "Power of courts to declare laws unconstitutional." },
+        { term: "Due Process", definition: "Fair legal procedures guaranteed by the Constitution." },
+        { term: "Bill of Rights", definition: "First ten amendments protecting individual liberties." },
+        { term: "Civic Duty", definition: "Legal obligation of citizens (e.g., jury duty, paying taxes)." },
+        { term: "Interest Group", definition: "Organization advocating for specific policy goals." },
+        { term: "Veto", definition: "President's power to reject legislation passed by Congress." },
+        { term: "Representative Democracy", definition: "Citizens elect officials to make laws on their behalf." },
+        { term: "Social Contract", definition: "Theory that individuals consent to give up some freedoms for societal protection." }
+    ];
+
+    // ----- RENDER SYLLABUS GRID -----
+    function renderSyllabus() {
+        const container = document.getElementById('syllabusGrid');
+        if (!container) return;
+        container.innerHTML = '';
+        syllabusUnits.forEach(unit => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <h3>${unit.title}</h3>
+                <p>${unit.description}</p>
+                <div class="sub-topics">
+                    <strong>📌 Key subtopics:</strong><br>
+                    ${unit.topics.map(t => `• ${t}`).join('<br>')}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // ----- QUIZ STATE MANAGEMENT -----
+    let currentQIndex = 0;
+    let userAnswers = new Array(quizQuestions.length).fill(null);   // stores selected option index (0-3)
+    let quizSubmitted = false;
+    let quizScore = null;
+
+    function renderCurrentQuestion() {
+        const quizContainer = document.getElementById('quizContainer');
+        if (!quizContainer) return;
+        const q = quizQuestions[currentQIndex];
+        const selectedVal = userAnswers[currentQIndex];
+        const isSubmittedMode = quizSubmitted;
+
+        let optionsHtml = '';
+        q.options.forEach((opt, idx) => {
+            const checkedAttr = (selectedVal === idx) ? 'checked' : '';
+            const disabledAttr = isSubmittedMode ? 'disabled' : '';
+            optionsHtml += `
+                <div class="option" data-opt-index="${idx}">
+                    <input type="radio" name="quizOption" value="${idx}" id="opt_${idx}" ${checkedAttr} ${disabledAttr}>
+                    <label for="opt_${idx}">${opt}</label>
+                </div>
+            `;
+        });
+
+        let feedbackHtml = '';
+        if (isSubmittedMode && selectedVal !== null) {
+            const isCorrect = (selectedVal === q.correct);
+            feedbackHtml = `<div class="quiz-feedback" style="background: ${isCorrect ? '#d4edda' : '#ffe0e0'}">
+                ${isCorrect ? '✅ Correct!' : `❌ Incorrect. Correct answer: ${q.options[q.correct]}`}
+            </div>`;
+        } else if (isSubmittedMode && selectedVal === null) {
+            feedbackHtml = `<div class="quiz-feedback" style="background:#fff3cd">⚠️ Not answered. Correct: ${q.options[q.correct]}</div>`;
+        }
+
+        quizContainer.innerHTML = `
+            <div class="question-text">${currentQIndex+1}. ${q.text}</div>
+            <div class="options-list" id="optionsList">
+                ${optionsHtml}
+            </div>
+            ${feedbackHtml}
+            <div style="font-size:0.85rem; margin-top:0.5rem;">Question ${currentQIndex+1} of ${quizQuestions.length}</div>
+        `;
+
+        // Attach event listeners to radio buttons (only if not submitted)
+        if (!quizSubmitted) {
+            const radioButtons = document.querySelectorAll('input[name="quizOption"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const selectedIdx = parseInt(e.target.value);
+                    if (!isNaN(selectedIdx)) {
+                        userAnswers[currentQIndex] = selectedIdx;
+                        // update score display (real-time not needed but we keep)
+                        updateScoreDisplayIfSubmitted();
+                    }
+                });
+            });
+            // Also add click on option div to improve UX
+            const optionDivs = document.querySelectorAll('.option');
+            optionDivs.forEach(div => {
+                div.addEventListener('click', (e) => {
+                    if (e.target.tagName !== 'INPUT') {
+                        const radioInput = div.querySelector('input[type="radio"]');
+                        if (radioInput && !radioInput.disabled) {
+                            radioInput.checked = true;
+                            const changeEvent = new Event('change', { bubbles: true });
+                            radioInput.dispatchEvent(changeEvent);
+                        }
+                    }
+                });
+            });
+        }
+        updateNavButtons();
+    }
+
+    function updateNavButtons() {
+        const prevBtn = document.getElementById('prevQuestion');
+        const nextBtn = document.getElementById('nextQuestion');
+        if (prevBtn) prevBtn.disabled = (currentQIndex === 0);
+        if (nextBtn) nextBtn.disabled = (currentQIndex === quizQuestions.length - 1);
+    }
+
+    function updateScoreDisplayIfSubmitted() {
+        const scoreElem = document.getElementById('quizScoreDisplay');
+        if (!scoreElem) return;
+        if (quizSubmitted) {
+            let correctCount = 0;
+            for (let i = 0; i < quizQuestions.length; i++) {
+                if (userAnswers[i] !== null && userAnswers[i] === quizQuestions[i].correct) correctCount++;
+            }
+            quizScore = correctCount;
+            scoreElem.innerText = `Score: ${quizScore} / ${quizQuestions.length}`;
+        } else {
+            let answeredCount = userAnswers.filter(a => a !== null).length;
+            scoreElem.innerText = `Answered: ${answeredCount} / ${quizQuestions.length} (Submit for score)`;
+        }
+    }
+
+    function submitQuiz() {
+        if (quizSubmitted) {
+            // if already submitted, just recalc show
+            updateScoreDisplayIfSubmitted();
+            renderCurrentQuestion(); // re-render with feedback
+            return;
+        }
+        quizSubmitted = true;
+        let correct = 0;
+        for (let i = 0; i < quizQuestions.length; i++) {
+            if (userAnswers[i] !== null && userAnswers[i] === quizQuestions[i].correct) correct++;
+        }
+        quizScore = correct;
+        const scoreElem = document.getElementById('quizScoreDisplay');
+        if (scoreElem) scoreElem.innerText = `Score: ${quizScore} / ${quizQuestions.length}`;
+        renderCurrentQuestion();  // show feedback for current question
+        // show small notification
+        const feedbackMsg = document.createElement('div');
+        feedbackMsg.innerText = `🎉 Quiz submitted! Final score: ${correct}/${quizQuestions.length}. You can reset to try again.`;
+        feedbackMsg.style.background = '#e9f5ec';
+        feedbackMsg.style.padding = '0.65rem';
+        feedbackMsg.style.borderRadius = '2rem';
+        feedbackMsg.style.marginTop = '1rem';
+        feedbackMsg.style.textAlign = 'center';
+        const existingMsg = document.querySelector('.temp-quiz-msg');
+        if(existingMsg) existingMsg.remove();
+        feedbackMsg.className = 'temp-quiz-msg';
+        document.querySelector('.quiz-area')?.appendChild(feedbackMsg);
+        setTimeout(() => { if(feedbackMsg) feedbackMsg.remove(); }, 2800);
+    }
+
+    function resetQuiz() {
+        userAnswers = new Array(quizQuestions.length).fill(null);
+        quizSubmitted = false;
+        quizScore = null;
+        currentQIndex = 0;
+        updateScoreDisplayIfSubmitted();
+        renderCurrentQuestion();
+        // remove any temp msg
+        const msgDiv = document.querySelector('.temp-quiz-msg');
+        if(msgDiv) msgDiv.remove();
+    }
+
+    function nextQuestion() {
+        if (currentQIndex < quizQuestions.length - 1) {
+            currentQIndex++;
+            renderCurrentQuestion();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentQIndex > 0) {
+            currentQIndex--;
+            renderCurrentQuestion();
+        }
+    }
+
+    // attach quiz global events after render (called once)
+    function bindQuizControls() {
+        const prevBtn = document.getElementById('prevQuestion');
+        const nextBtn = document.getElementById('nextQuestion');
+        const submitBtn = document.getElementById('submitQuiz');
+        const resetBtn = document.getElementById('resetQuiz');
+        if (prevBtn) prevBtn.onclick = () => prevQuestion();
+        if (nextBtn) nextBtn.onclick = () => nextQuestion();
+        if (submitBtn) submitBtn.onclick = () => submitQuiz();
+        if (resetBtn) resetBtn.onclick = () => resetQuiz();
+    }
+
+    // RENDER GLOSSARY
+    function renderGlossary() {
+        const glossaryContainer = document.getElementById('glossaryList');
+        if (!glossaryContainer) return;
+        glossaryContainer.innerHTML = '';
+        glossaryTerms.forEach(item => {
+            const li = document.createElement('li');
+            li.innerHTML = `<span>📌 ${item.term}:</span> ${item.definition}`;
+            glossaryContainer.appendChild(li);
+        });
+    }
+
+    // ----- TAB SWITCHING LOGIC -----
+    function initTabs() {
+        const tabs = document.querySelectorAll('.tab-btn');
+        const panels = document.querySelectorAll('.panel');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetId = tab.getAttribute('data-tab');
+                // update active class on buttons
+                tabs.forEach(btn => btn.classList.remove('active'));
+                tab.classList.add('active');
+                // show correct panel
+                panels.forEach(panel => panel.classList.remove('active-panel'));
+                const activePanel = document.getElementById(targetId);
+                if (activePanel) activePanel.classList.add('active-panel');
+
+                // optional: re-render quiz UI when switching to quiz, to avoid sync issues
+                if (targetId === 'quiz') {
+                    // refresh quiz view in case of any changes (ensures correct state)
+                    renderCurrentQuestion();
+                    updateScoreDisplayIfSubmitted();
+                }
+            });
+        });
+    }
+
+    // initial load all
+    function init() {
+        renderSyllabus();
+        renderGlossary();
+        // initial quiz render
+        renderCurrentQuestion();
+        bindQuizControls();
+        updateScoreDisplayIfSubmitted();
+        initTabs();
+    }
+    init();
+</script>
+</body>
+</html>
