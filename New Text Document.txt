@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SAY Foundation | Digital Learning Hub</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: #f5f7fb;
+            color: #1a2c3e;
+            line-height: 1.5;
+        }
+        /* HIGH CONTRAST & ACCESSIBILITY */
+        .high-contrast {
+            background: #000 !important;
+            color: #fff !important;
+        }
+        .high-contrast .card, .high-contrast .nav-bar, .high-contrast .hero {
+            background: #111 !important;
+            color: #fff !important;
+            border-color: #333 !important;
+        }
+        /* navigation */
+        .nav-bar {
+            background: #0a2e3f;
+            padding: 1rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .logo {
+            color: white;
+            font-weight: 800;
+            font-size: 1.4rem;
+        }
+        .logo i {
+            color: #f5b042;
+        }
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover {
+            color: #ffcd7e;
+        }
+        .access-toolbar {
+            display: flex;
+            gap: 8px;
+        }
+        .access-btn {
+            background: #2c5a6e;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        .hero {
+            background: linear-gradient(135deg, #0f3b4f, #1c5d7a);
+            border-radius: 2rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            color: white;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            margin: 1.5rem 0 1rem;
+            font-weight: 700;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid #e2edf2;
+        }
+        .card h3 {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        button, .btn {
+            background: #1e6f5c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #0e5544;
+        }
+        .quiz-option {
+            background: #f1f5f9;
+            margin: 8px 0;
+            padding: 8px 12px;
+            border-radius: 60px;
+            cursor: pointer;
+        }
+        .forum-post {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 0;
+        }
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 40px;
+            margin-bottom: 6px;
+        }
+        textarea, input, select {
+            border-radius: 30px;
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            width: 100%;
+        }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .resource-item {
+            background: #eef2ff;
+            border-radius: 20px;
+            padding: 8px 12px;
+            margin: 6px 0;
+        }
+        .badge {
+            background: #e2e8f0;
+            padding: 2px 8px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+        }
+        iframe {
+            width: 100%;
+            border-radius: 20px;
+            aspect-ratio: 16/9;
+        }
+        @media (max-width: 700px) {
+            .nav-links { gap: 0.8rem; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="logo"><i class="fas fa-handshake"></i> SAY Foundation</div>
+        <div class="nav-links">
+            <a href="#" data-section="home">Home</a>
+            <a href="#" data-section="courses">Courses</a>
+            <a href="#" data-section="resources">Resources</a>
+            <a href="#" data-section="community">Community</a>
+            <a href="#" data-section="about">About</a>
+            <a href="#" data-section="contact">Contact</a>
+        </div>
+        <div class="access-toolbar">
+            <button class="access-btn" id="toggleContrastBtn"><i class="fas fa-adjust"></i> High Contrast</button>
+            <button class="access-btn" id="ttsToggleBtn"><i class="fas fa-volume-up"></i> Text-to-Speech</button>
+        </div>
+    </div>
+
+    <div class="container" id="appContainer">
+        <!-- Dynamic sections will be injected here -->
+    </div>
+
+    <script>
+        // ---------- DATA MODELS ----------
+        let dailyExpenses = JSON.parse(localStorage.getItem("say_expenses")) || [
+            { id: "e1", desc: "Stationery for Chinese class", amount: 45, date: "2026-04-02" },
+            { id: "e2", desc: "AI software subscription", amount: 120, date: "2026-04-03" }
+        ];
+        let forumMessages = JSON.parse(localStorage.getItem("say_forum")) || [
+            { id: "f1", user: "Zanele", course: "Chinese Language", message: "How to practice tones effectively?", timestamp: "2026-04-03" },
+            { id: "f2", user: "Kwame", course: "AI Course", message: "Anyone working on the ML project?", timestamp: "2026-04-04" }
+        ];
+        let courseComments = JSON.parse(localStorage.getItem("say_comments")) || []; // { courseId, user, comment, date }
+        
+        // Quiz results storage (simple)
+        let quizScores = JSON.parse(localStorage.getItem("say_quizScores")) || {};
+
+        // Helper save
+        function persistAll() {
+            localStorage.setItem("say_expenses", JSON.stringify(dailyExpenses));
+            localStorage.setItem("say_forum", JSON.stringify(forumMessages));
+            localStorage.setItem("say_comments", JSON.stringify(courseComments));
+            localStorage.setItem("say_quizScores", JSON.stringify(quizScores));
+        }
+
+        // Text-to-speech flag
+        let ttsEnabled = false;
+        let contrastEnabled = false;
+
+        // Helper speak
+        function speakText(text) {
+            if (!ttsEnabled) return;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // -------- RENDER MAIN PAGE (HOME default) ----------
+        let currentSection = "home";
+
+        function renderApp() {
+            const container = document.getElementById("appContainer");
+            if (!container) return;
+            if (currentSection === "home") renderHome(container);
+            else if (currentSection === "courses") renderCourses(container);
+            else if (currentSection === "resources") renderResources(container);
+            else if (currentSection === "community") renderCommunity(container);
+            else if (currentSection === "about") renderAbout(container);
+            else if (currentSection === "contact") renderContact(container);
+            // attach extra handlers after render
+            attachDynamicHandlers();
+        }
+
+        // HOME: shows courses preview, videos, podcasts, interactive graphics + expenditures
+        function renderHome(container) {
+            container.innerHTML = `
+                <div class="hero">
+                    <h1><i class="fas fa-globe-africa"></i> Welcome to SAY Digital Hub</h1>
+                    <p>Learn Chinese & AI | Interactive lessons, live sessions & community support</p>
+                    <button id="exploreCoursesBtn" class="btn" style="margin-top:12px;">Explore Courses →</button>
+                </div>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3><i class="fas fa-video"></i> Featured Video: Chinese Basics</h3>
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=abc" title="Chinese intro video" allowfullscreen></iframe>
+                        <p style="margin-top:8px;">Learn greetings and tones</p>
+                        <button class="speak-btn" data-text="Welcome to Chinese language course. Learn greetings and tones.">🔊 Listen</button>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-podcast"></i> Podcast: AI for Africa</h3>
+                        <audio controls style="width:100%; border-radius:40px;">
+                            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                        </audio>
+                        <p>Discussion on AI opportunities</p>
+                        <button class="speak-btn" data-text="Listen to podcast about AI in Africa.">🔊 Text summary</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-chart-line"></i> Interactive Graphic: Student Progress Overview</h3>
+                    <canvas id="progressChart" width="400" height="200" style="max-width:100%; background:#f0f4fa; border-radius:24px;"></canvas>
+                    <p>📊 78% of students improved in Chinese | 65% in AI</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-coins"></i> Daily Expenditures Tracking</h3>
+                    <div id="expenseList"></div>
+                    <div class="flex-between">
+                        <input type="text" id="expenseDesc" placeholder="Item description" style="flex:2">
+                        <input type="number" id="expenseAmount" placeholder="Amount (USD)" style="flex:1">
+                        <input type="date" id="expenseDate" value="${new Date().toISOString().slice(0,10)}" style="flex:1">
+                        <button id="addExpenseBtn"><i class="fas fa-plus"></i> Add</button>
+                    </div>
+                    <p id="totalExpense" style="font-weight:bold; margin-top:8px;"></p>
+                </div>
+            `;
+            renderExpenseList();
+            drawSimpleChart();
+            document.getElementById("addExpenseBtn")?.addEventListener("click", addExpense);
+            document.getElementById("exploreCoursesBtn")?.addEventListener("click", () => { currentSection = "courses"; renderApp(); });
+        }
+
+        function renderExpenseList() {
+            const listDiv = document.getElementById("expenseList");
+            if(!listDiv) return;
+            if(dailyExpenses.length===0) listDiv.innerHTML = "<p>No expenses yet.</p>";
+            else {
+                listDiv.innerHTML = dailyExpenses.map(exp => `<div class="expense-item"><span>${exp.desc}</span><span>$${exp.amount} (${exp.date}) <button class="del-expense" data-id="${exp.id}"><i class="fas fa-trash-alt"></i></button></span></div>`).join("");
+                document.querySelectorAll(".del-expense").forEach(btn => {
+                    btn.addEventListener("click", (e) => {
+                        const id = btn.getAttribute("data-id");
+                        dailyExpenses = dailyExpenses.filter(e => e.id !== id);
+                        persistAll();
+                        renderExpenseList();
+                        updateTotalExpense();
+                    });
+                });
+            }
+            updateTotalExpense();
+        }
+        function updateTotalExpense() {
+            const total = dailyExpenses.reduce((sum, e) => sum + e.amount, 0);
+            const totalSpan = document.getElementById("totalExpense");
+            if(totalSpan) totalSpan.innerText = `💰 Total Expenditure: $${total}`;
+        }
+        function addExpense() {
+            const desc = document.getElementById("expenseDesc")?.value.trim();
+            const amount = parseFloat(document.getElementById("expenseAmount")?.value);
+            const date = document.getElementById("expenseDate")?.value;
+            if(!desc || isNaN(amount)) return alert("Enter description and amount");
+            const newExp = { id: Date.now().toString(), desc, amount, date };
+            dailyExpenses.push(newExp);
+            persistAll();
+            renderExpenseList();
+            document.getElementById("expenseDesc").value = "";
+            document.getElementById("expenseAmount").value = "";
+        }
+
+        function drawSimpleChart() {
+            const canvas = document.getElementById("progressChart");
+            if(!canvas) return;
+            const ctx = canvas.getContext("2d");
+            canvas.width = 400; canvas.height = 200;
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = "#1e6f5c";
+            ctx.fillRect(30, 150-78, 80, 78);
+            ctx.fillRect(140, 150-65, 80, 65);
+            ctx.fillStyle = "#f5b042";
+            ctx.fillRect(250, 150-48, 80, 48);
+            ctx.fillStyle = "#0f3b4f";
+            ctx.font = "12px Inter";
+            ctx.fillText("Chinese", 45, 170);
+            ctx.fillText("AI", 160, 170);
+            ctx.fillText("Both", 270, 170);
+            ctx.fillStyle = "#000";
+            ctx.fillText("78%", 55, 140);
+            ctx.fillText("65%", 165, 145);
+            ctx.fillText("48%", 280, 115);
+        }
+
+        // COURSES: modules with quizzes, comments, downloadable resources, live sessions
+        function renderCourses(container) {
+            container.innerHTML = `
+                <h2 class="section-title"><i class="fas fa-book-open"></i> Course Modules: Chinese & AI</h2>
+                <div class="grid-2" id="coursesGrid"></div>
+                <div class="card" style="margin-top:1rem;">
+                    <h3><i class="fas fa-comments"></i> Course Comments & Discussion</h3>
+                    <div id="courseCommentsSection"></div>
+                    <select id="commentCourseSelect"><option value="Chinese Language">Chinese Language</option><option value="AI Course">AI Course</option></select>
+                    <input type="text" id="commentUserName" placeholder="Your name">
+                    <textarea id="commentText" rows="2" placeholder="Write your comment..."></textarea>
+                    <button id="postCommentBtn">Post Comment</button>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-calendar-alt"></i> Live Sessions / Webinars</h3>
+                    <p><i class="fas fa-video"></i> Next Live: Chinese Speaking Practice (Sat, April 8, 3pm GMT) <button id="joinLiveBtn" class="btn-sm">Join Zoom →</button></p>
+                    <p><i class="fas fa-chalkboard"></i> AI Project Showcase: April 12, 5pm GMT</p>
+                </div>
+            `;
+            const coursesData = [
+                { id: "ch1", title: "Chinese 101: Tones & Greetings", type: "Chinese", quiz: { q: "What does 'Nǐ hǎo' mean?", options: ["Goodbye","Hello","Thank you"], correct: 1 }, resources: ["Chinese_Basics.pdf","Tones_CheatSheet.pdf"] },
+                { id: "ai1", title: "AI Fundamentals: Python Basics", type: "AI", quiz: { q: "Which language is commonly used for AI?", options: ["HTML","Python","CSS"], correct: 1 }, resources: ["Python_Intro.pdf","AI_Glossary.pdf"] }
+            ];
+            const grid = document.getElementById("coursesGrid");
+            if(grid) {
+                grid.innerHTML = coursesData.map(course => `
+                    <div class="card">
+                        <h3>${course.title}</h3>
+                        <button class="speak-btn" data-text="${course.title}. ${course.quiz.q}">🔊 Listen</button>
+                        <div><strong>📝 Quiz:</strong> ${course.quiz.q}</div>
+                        <div id="quiz-${course.id}"></div>
+                        <button class="submitQuizBtn" data-course="${course.id}" data-correct="${course.quiz.correct}">Submit Answer</button>
+                        <p id="quizResult-${course.id}"></p>
+                        <hr>
+                        <strong>📎 Downloadable Resources:</strong>
+                        <div>${course.resources.map(res => `<div class="resource-item"><i class="fas fa-download"></i> <a href="#" data-res="${res}">${res}</a> (PDF/Slides)</div>`).join('')}</div>
+                    </div>
+                `).join("");
+                // attach quiz logic
+                coursesData.forEach(c => {
+                    const btn = document.querySelector(`.submitQuizBtn[data-course="${c.id}"]`);
+                    if(btn) {
+                        btn.addEventListener("click", () => {
+                            const selected = document.querySelector(`input[name="quiz-${c.id}"]:checked`);
+                            if(!selected) return alert("Select an option");
+                            const isCorrect = parseInt(selected.value) === c.quiz.correct;
+                            const resultDiv = document.getElementById(`quizResult-${c.id}`);
+                            if(isCorrect) { resultDiv.innerHTML = "✅ Correct! Well done."; quizScores[c.id] = (quizScores[c.id]||0)+1; }
+                            else resultDiv.innerHTML = "❌ Try again!";
+                            persistAll();
+                        });
+                    }
+                    // render radio buttons
+                    const quizDiv = document.getElementById(`quiz-${c.id}`);
+                    if(quizDiv) {
+                        quizDiv.innerHTML = c.quiz.options.map((opt, idx) => `<label style="display:block;"><input type="radio" name="quiz-${c.id}" value="${idx}"> ${opt}</label>`).join('');
+                    }
+                    // downloadable resource simulation
+                    document.querySelectorAll(`a[data-res]`).forEach(link => {
+                        link.addEventListener("click", (e) => { e.preventDefault(); alert(`Downloading: ${link.getAttribute("data-res")} (simulated)`); });
+                    });
+                });
+            }
+            renderCourseComments();
+            document.getElementById("postCommentBtn")?.addEventListener("click", () => {
+                const courseSel = document.getElementById("commentCourseSelect").value;
+                const userName = document.getElementById("commentUserName").value.trim();
+                const comment = document.getElementById("commentText").value.trim();
+                if(!userName || !comment) return alert("Enter name and comment");
+                courseComments.push({ courseId: courseSel, user: userName, comment, date: new Date().toLocaleString() });
+                persistAll();
+                renderCourseComments();
+                document.getElementById("commentText").value = "";
+            });
+            document.getElementById("joinLiveBtn")?.addEventListener("click", () => alert("Join webinar: https://zoom.us/say-live (demo link)"));
+        }
+
+        function renderCourseComments() {
+            const section = document.getElementById("courseCommentsSection");
+            if(!section) return;
+            const filtered = courseComments.slice(-6).reverse();
+            section.innerHTML = filtered.map(c => `<div class="forum-post"><strong>${c.user}</strong> on ${c.courseId}: ${c.comment} <span class="badge">${c.date}</span></div>`).join("");
+            if(courseComments.length===0) section.innerHTML = "<p>No comments yet. Be the first!</p>";
+        }
+
+        // RESOURCES: podcasts, videos, interactive
+        function renderResources(container) {
+            container.innerHTML = `
+                <h2 class="section-title"><i class="fas fa-download"></i> Learning Resources</h2>
+                <div class="grid-2">
+                    <div class="card"><h3>📄 PDF Slides & Cheatsheets</h3><div id="pdfList"></div></div>
+                    <div class="card"><h3>🎥 Interactive Video Lessons</h3><iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Interactive"></iframe><button class="speak-btn" data-text="Watch interactive video about Chinese characters.">🔊 Audio desc</button></div>
+                    <div class="card"><h3>🎙️ Podcast Episodes</h3><audio controls src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"></audio><p>AI ethics in Africa</p></div>
+                    <div class="card"><h3>📊 Interactive Graphic: Language Learning Tracker</h3><canvas id="langChart" width="300" height="150"></canvas></div>
+                </div>
+            `;
+            const pdfList = document.getElementById("pdfList");
+            if(pdfList) {
+                pdfList.innerHTML = `<div class="resource-item"><i class="fas fa-file-pdf"></i> <a href="#" data-res="Chinese_Grammar.pdf">Chinese Grammar.pdf</a></div>
+                <div class="resource-item"><i class="fas fa-file-powerpoint"></i> <a href="#" data-res="AI_Slides_Week1.pptx">AI_Slides_Week1.pptx</a></div>
+                <div class="resource-item"><i class="fas fa-file-alt"></i> <a href="#" data-res="CheatSheet_AI_Terms.pdf">CheatSheet_AI_Terms.pdf</a></div>`;
+                document.querySelectorAll("#pdfList a").forEach(link => link.addEventListener("click", (e) => { e.preventDefault(); alert(`Download: ${link.getAttribute("data-res")}`); }));
+            }
+            const ctx2 = document.getElementById("langChart")?.getContext("2d");
+            if(ctx2) { ctx2.fillStyle = "#f5b042"; ctx2.fillRect(20,80,60,40); ctx2.fillStyle = "#1e6f5c"; ctx2.fillRect(100,60,60,60); ctx2.fillText("Words learned", 25, 130); }
+        }
+
+        // COMMUNITY: discussion forums, chat for each course
+        function renderCommunity(container) {
+            container.innerHTML = `
+                <h2 class="section-title"><i class="fas fa-comments"></i> Community Forums & Discussion</h2>
+                <div class="grid-2">
+                    <div class="card"><h3>💬 Course Forums</h3><select id="forumCourseSelect"><option value="Chinese Language">Chinese Language Forum</option><option value="AI Course">AI Course Forum</option></select><div id="forumMessagesList"></div><input type="text" id="forumUserName" placeholder="Your name"><textarea id="forumMsg" rows="2" placeholder="Write a message..."></textarea><button id="postForumMsgBtn">Post to Forum</button></div>
+                    <div class="card"><h3>📢 Live Chat Simulator</h3><div id="chatBox" style="height:200px; overflow-y:auto; background:#f1f5f9; border-radius:20px; padding:8px;"></div><input type="text" id="chatInput" placeholder="Chat as guest..."><button id="sendChatBtn">Send</button></div>
+                </div>
+            `;
+            renderForumMessages();
+            document.getElementById("postForumMsgBtn")?.addEventListener("click", () => {
+                const course = document.getElementById("forumCourseSelect").value;
+                const user = document.getElementById("forumUserName").value.trim();
+                const msg = document.getElementById("forumMsg").value.trim();
+                if(!user || !msg) return alert("Enter name and message");
+                forumMessages.push({ id: Date.now().toString(), user, course, message: msg, timestamp: new Date().toLocaleString() });
+                persistAll();
+                renderForumMessages();
+                document.getElementById("forumMsg").value = "";
+            });
+            // chat simulation
+            let chatLog = [];
+            const chatDiv = document.getElementById("chatBox");
+            const sendChat = () => {
+                const inputChat = document.getElementById("chatInput");
+                if(inputChat.value.trim()) {
+                    chatLog.push(`Guest: ${inputChat.value}`);
+                    if(chatDiv) chatDiv.innerHTML = chatLog.map(l => `<div>${l}</div>`).join("");
+                    inputChat.value = "";
+                }
+            };
+            document.getElementById("sendChatBtn")?.addEventListener("click", sendChat);
+        }
+        function renderForumMessages() {
+            const forumDiv = document.getElementById("forumMessagesList");
+            if(!forumDiv) return;
+            const selectedCourse = document.getElementById("forumCourseSelect")?.value || "Chinese Language";
+            const filtered = forumMessages.filter(f => f.course === selectedCourse).slice(-8);
+            forumDiv.innerHTML = filtered.map(m => `<div class="forum-post"><strong>${m.user}</strong>: ${m.message}<br><span class="badge">${m.timestamp}</span></div>`).join("");
+            if(filtered.length===0) forumDiv.innerHTML = "<p>No messages yet. Start discussion!</p>";
+            document.getElementById("forumCourseSelect")?.addEventListener("change", () => renderForumMessages());
+        }
+
+        function renderAbout(container) { container.innerHTML = `<div class="card"><h2>About SAY Foundation</h2><p>Empowering youth through Chinese language and AI education. Bridging Sino-Africa collaboration.</p><p>Accessibility: Text-to-speech, high contrast, clear fonts.</p></div>`; }
+        function renderContact(container) { container.innerHTML = `<div class="card"><h2>Contact Us</h2><p>Email: hello@sayfoundation.org</p><p>WhatsApp: +254 700 123456</p><p>Follow us: @say_africa</p></div>`; }
+
+        function attachDynamicHandlers() {
+            document.querySelectorAll(".speak-btn").forEach(btn => {
+                btn.addEventListener("click", () => { const txt = btn.getAttribute("data-text"); if(txt) speakText(txt); });
+            });
+            document.getElementById("toggleContrastBtn")?.addEventListener("click", () => {
+                contrastEnabled = !contrastEnabled;
+                if(contrastEnabled) document.body.classList.add("high-contrast");
+                else document.body.classList.remove("high-contrast");
+            });
+            document.getElementById("ttsToggleBtn")?.addEventListener("click", () => {
+                ttsEnabled = !ttsEnabled;
+                alert(`Text-to-Speech ${ttsEnabled ? "ON" : "OFF"}`);
+            });
+        }
+
+        // Navigation event
+        document.querySelectorAll(".nav-links a").forEach(link => {
+            link.addEventListener("click", (e) => {
+                e.preventDefault();
+                const section = link.getAttribute("data-section");
+                if(section) currentSection = section;
+                renderApp();
+            });
+        });
+        renderApp();
+        window.persistAll = persistAll;
+    </script>
+</body>
+</html>
